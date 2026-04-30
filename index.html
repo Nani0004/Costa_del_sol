@@ -871,7 +871,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .hero-subline-text {
     font-family: 'Calibri', 'Carlito', 'Helvetica Neue', Arial, sans-serif;
     font-style: italic;
-    font-size: 22px;
+    font-size: 32px;
     font-weight: 400;
     color: var(--green-soft);
   }
@@ -1087,7 +1087,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     padding: 0;
     overflow: hidden;
   }
-  .leaflet-popup-content { margin: 0; padding: 0; min-width: 360px; }
+  .leaflet-popup-content { margin: 0; padding: 0; min-width: 380px; }
   .leaflet-popup-tip { background: var(--green-dark); }
   .popup-content {
     background: var(--white);
@@ -1097,43 +1097,47 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .popup-header {
     background: var(--green-dark);
     color: var(--white);
-    padding: 22px 24px;
+    padding: 18px 22px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 16px;
     border-left: 6px solid var(--yellow);
   }
   .popup-id {
     font-family: 'Calibri', 'Carlito', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 42px;
+    font-size: 38px;
     font-weight: 700;
     color: var(--yellow);
     line-height: 1;
+    letter-spacing: 0;
+    flex-shrink: 0;
+  }
+  .popup-title {
+    font-family: 'Calibri', 'Carlito', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    flex: 1;
     letter-spacing: 0;
   }
   .popup-year {
     background: var(--yellow);
     color: var(--green-dark);
     font-weight: 700;
-    font-size: 14px;
-    padding: 7px 16px;
+    font-size: 13px;
+    padding: 6px 12px;
     border-radius: 4px;
     letter-spacing: 0.04em;
+    flex-shrink: 0;
   }
-  .popup-body { padding: 22px 24px 24px; }
-  .popup-name {
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--green-dark);
-    margin-bottom: 5px;
-    letter-spacing: 0;
-  }
+  .popup-body { padding: 18px 22px 22px; }
   .popup-loc {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--neutral-500);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     font-weight: 500;
   }
   .popup-stats {
@@ -1396,7 +1400,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <h1 class="hero-wordmark">COSTA<br>DEL SOL</h1>
           <div class="hero-subline">
             <div class="bar"></div>
-            <div class="hero-subline-text">Jesús Arévalo</div>
+            <div class="hero-subline-text">Franquiciado Jesús Arévalo</div>
           </div>
         </div>
         <div class="hero-stats">
@@ -1445,12 +1449,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <script>
 const RESTAURANTS = [
-  { id:"89",   name:"McDonald's Mijas",            shortName:"Mijas",            tipDir:"right",  loc:"Mijas Costa",     year:2013, lat:36.5403, lng:-4.6346, s2025:3610224, s2026:3858986 },
-  { id:"268",  name:"McDonald's Mijas-Calahonda",  shortName:"Mijas-Calahonda",  tipDir:"top",    loc:"Mijas-Calahonda", year:2013, lat:36.4895, lng:-4.7242, s2025:3458411, s2026:3490684 },
+  { id:"89",   name:"McDonald's Mijas",            shortName:"Mijas",            tipDir:"bottom", loc:"Mijas Costa",     year:2013, lat:36.5403, lng:-4.6346, s2025:3610224, s2026:3858986 },
+  { id:"268",  name:"McDonald's Mijas-Calahonda",  shortName:"Mijas-Calahonda",  tipDir:"bottom", loc:"Mijas-Calahonda", year:2013, lat:36.4895, lng:-4.7242, s2025:3458411, s2026:3490684 },
   { id:"798",  name:"McDonald's Fuengirola Puerto",shortName:"Fuengirola Puerto",tipDir:"right",  loc:"Fuengirola",      year:2015, lat:36.5385, lng:-4.6210, s2025:2759728, s2026:2717121 },
   { id:"1135", name:"McDonald's Coín",             shortName:"Coín",             tipDir:"right",  loc:"Coín",            year:2021, lat:36.6751, lng:-4.7311, s2025:1956892, s2026:2153714 },
   { id:"1248", name:"McDonald's Mijas-Chaparral",  shortName:"Mijas-Chaparral",  tipDir:"left",   loc:"Mijas",           year:2024, lat:36.5081, lng:-4.6590, s2025:1179021, s2026:1456492 },
-  { id:"1278", name:"McDonald's Fuengirola Norte", shortName:"Fuengirola Norte", tipDir:"left",   loc:"Fuengirola",      year:2024, lat:36.5575, lng:-4.6274, s2025:2614578, s2026:2744562 },
+  { id:"1278", name:"McDonald's Fuengirola Norte", shortName:"Fuengirola Norte", tipDir:"top",    loc:"Fuengirola",      year:2024, lat:36.5575, lng:-4.6274, s2025:2614578, s2026:2744562 },
 ];
 
 const TOTAL_2025 = RESTAURANTS.reduce((s,r) => s + r.s2025, 0);
@@ -1521,11 +1525,13 @@ function toggleFullscreen() {
 // ─── SIDEBAR CARDS (Slide 2) ─────────────────────────────────────────────
 function buildSidebar() {
   const el = document.getElementById('sidebar');
-  el.innerHTML = sortedById.map(r => `
+  el.innerHTML = sortedById.map(r => {
+    const sidebarName = r.name.replace("McDonald's", "McD");
+    return `
     <div class="resto-card" data-id="${r.id}" onclick="focusRestaurant('${r.id}')">
       <div class="resto-id">${r.id}</div>
       <div class="resto-info">
-        <div class="resto-name">${r.name}</div>
+        <div class="resto-name">${sidebarName}</div>
         <div class="resto-meta">${r.loc} · ${r.year}</div>
       </div>
       <div class="resto-numbers">
@@ -1533,7 +1539,8 @@ function buildSidebar() {
         <div class="resto-y26">${formatM(r.s2026).replace(' M€','M')} <span style="font-size:10px;opacity:0.7">'26</span></div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 buildSidebar();
 
@@ -1629,9 +1636,9 @@ RESTAURANTS.forEach(r => {
 
   const m = L.marker([r.lat, r.lng], { icon }).addTo(map);
 
-  // Permanent tooltip with full restaurant name, with per-pin direction
+  // Permanent tooltip with restaurant name (short form, full in popup)
   const tipOffsets = { right:[22,0], left:[-22,0], top:[0,-22], bottom:[0,22] };
-  m.bindTooltip(r.name, {
+  m.bindTooltip(r.shortName, {
     permanent: true,
     direction: r.tipDir,
     offset: tipOffsets[r.tipDir] || [22, 0],
@@ -1648,10 +1655,10 @@ RESTAURANTS.forEach(r => {
     <div class="popup-content">
       <div class="popup-header">
         <div class="popup-id">${r.id}</div>
+        <div class="popup-title">${r.name}</div>
         <div class="popup-year">${r.year}</div>
       </div>
       <div class="popup-body">
-        <div class="popup-name">${r.name}</div>
         <div class="popup-loc">${r.loc}</div>
         <div class="popup-stats">
           <div class="popup-stat">
@@ -1671,7 +1678,7 @@ RESTAURANTS.forEach(r => {
         </div>
       </div>
     </div>
-  `, { closeButton: true, autoPan: true, maxWidth: 420 });
+  `, { closeButton: true, autoPan: true, maxWidth: 440 });
 
   m.on('click', () => {
     document.querySelectorAll('.resto-card').forEach(c => c.classList.toggle('active', c.dataset.id === r.id));
